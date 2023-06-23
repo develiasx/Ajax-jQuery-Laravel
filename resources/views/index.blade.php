@@ -127,52 +127,40 @@
 
 
                 // Set data
-                var data = [{
-                        month: "JANEIRO",
-                        value: "{{$Janeiro}}"
-                }, {
-                    month: "FEVEREIRO",
-                    value: "{{$Fevereiro}}"
-                }, {
-                    month: "MARÇO",
-                    value: "{{$Marco}}"
-                }, {
-                    month: "ABRIL",
-                    value: "{{$Abril}}"
-                }, {
-                    month: "MAIO",
-                    value: "{{$Maio}}"
-                }, {
-                    month: "JUNHO",
-                    value: "{{$Junho}}"
-                }, {
-                    month: "JULHO",
-                    value: "{{$Julho}}"
-                }, {
-                    month: "AGOSTO",
-                    value: "{{$Agosto}}"
-                }, {
-                    month: "SETEMBRO",
-                    value: 800
-                }, {
-                    month: "OUTUBRO",
-                    value: "{{$Outubro}}"
-                },{
-                    month: "NOVEMBRO",
-                    value: "{{$Novembro}}"
-                }, {
-                    month: "DEZEMBRO",
-                    value: 341
-                }];
+                var data = @json($data);
+
 
                 xAxis.data.setAll(data);
                 series.data.setAll(data);
 
+                series.appear(1000);    
+                chart.appear(1000, 100);
+
 
                 // Make stuff animate on load
                 // https://www.amcharts.com/docs/v5/concepts/animations/
-                series.appear(1000);
-                chart.appear(1000, 100);
+                $("#botao").on('click', function(e) {
+                    console.log('botao apertado')
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: "{{ route('ajax') }}",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                        },
+                        success: function(result, status) {
+
+                            xAxis.data.setAll(result);
+                            series.data.setAll(result);
+
+                            series.appear(1000);    
+                            chart.appear(1000, 100);
+                        }
+                    });
+
+                });
 
             }); // end am5.ready()
         </script>
@@ -180,32 +168,10 @@
         <!-- HTML -->
         <div id="chartdiv"></div>
 
+        <button type="button" id="botao">Clique</button>
+
 
     </div>
-    <script>
-        $("#botao").on('click', function(e) {
-            console.log('botao apertado')
-            e.preventDefault();
-
-            $.ajax({
-                url: "{{ route('people.store') }}",
-                type: "POST",
-                data: {
-                    "form": $("#cadastro").serializeJSON(),
-
-                    "_token": "{{ csrf_token() }}",
-                    dataType: "json"
-                },
-                success: function(result, status) {
-                    console.log(status);
-                    console.log(result);
-                }
-            });
-
-
-
-        });
-    </script>
 
 
 

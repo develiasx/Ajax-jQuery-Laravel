@@ -11,21 +11,33 @@ class PeopleController extends Controller
      */
     public function index()
     {
-        return view('index', [
-            'Janeiro' => '560',
-            'Fevereiro' => '620',
+
+        $meses = [
+            'Janeiro' => '2500',
+            'Fevereiro' => '6000',
             'Marco' => '400',
-            'Abril' => '350',
+            'Abril' => '570',
             'Maio' => '700',
             'Junho' => '1200',
             'Julho' => '2450',
             'Agosto' => '1100',
-            'Setembro' => '990',
+            'Setembro' => '800',
             'Outubro' => '540',
             'Novembro' => '670',
             'Dezembro' => '400',
+        ];
 
-        ]);
+        $data = [];
+
+        foreach($meses as $key => $value){
+            $item = [
+                'month' => $key,
+                'value' => (int)$value
+            ];
+            $data[] = $item;
+        }
+
+        return view('index',['data' => $data] );
     }
 
     /**
@@ -41,10 +53,12 @@ class PeopleController extends Controller
      */
     public function store(Request $request)
     {
+        
         $data = $request->all();
         $formData = $data['form'];
 
         return $formData;
+
     }
 
     /**
